@@ -6,17 +6,28 @@ import { AuthContext } from '../../contexts/AuthContext';
 const Navbar = () => {
 
 
-    const {user} = use(AuthContext)
-    console.log(user) // null
-    /*
-    _UserImpl {providerId: 'firebase', proactiveRefresh: ProactiveRefresh, reloadUserInfo: {…}, reloadListener: null, uid: 'msUmQMEdQqTtr8oPVActRDUyyiZ2', …}
-    */
+    const {user, signOutUser} = use(AuthContext)
+    console.log(user) 
     
+    const handleSignOut = () => {
+      signOutUser()
+      .then(()=>{
+        console.log('sign out successful')
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    }
+
 
     const links = <>
          <li><NavLink to="/">Home</NavLink></li>
          <li><NavLink to="/login">Login</NavLink></li>
          <li><NavLink to="/register">Register</NavLink></li>
+         {user && <>
+          <li><NavLink to="/orders">Orders</NavLink></li>
+          <li><NavLink to="/profile">Profile</NavLink></li>
+         </>}
     </>
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -39,7 +50,13 @@ const Navbar = () => {
     </ul>
   </div>
   <div className="navbar-end">
-  { user ?  <a className="btn">Sign Out</a> : <Link to="/login">Login</Link>}
+  { user ?
+    <>
+    <span>{user.email}</span>
+    <a onSubmit={handleSignOut} className="btn">Sign Out</a> 
+    </> : <Link to="/login">Login</Link>
+
+  }
   </div>
 </div>
     );
