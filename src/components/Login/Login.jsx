@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Login = () => {
-  const {signInUser} = use(AuthContext);
+  const {signInUser, googleSignIn} = use(AuthContext);
   const Navigate = useNavigate()
 
   const handleLogin = e => {
@@ -16,7 +16,7 @@ const Login = () => {
     signInUser(email, password)
     .then(result => {
       console.log(result)
-      Navigate('/')
+      Navigate(location?.state || '/')
     })
     .catch(error => {
       console.log(error)
@@ -25,7 +25,14 @@ const Login = () => {
   }
 
   const handleGoogleLogin = () => {
-    
+    googleSignIn()
+    .then(result=>{
+      console.log(result)
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+
   }
 
 
